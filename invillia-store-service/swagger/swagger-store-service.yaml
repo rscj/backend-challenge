@@ -176,7 +176,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorMessage'   
             
-  /order/{storeId}/address:
+  /store/{storeId}/address:
     get:
       tags: 
         - addresses
@@ -244,7 +244,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorMessage'  
             
-  /order/{storeId}/address/{id}:
+  /store/{storeId}/address/{id}:
     get:
       tags: 
         - addresses

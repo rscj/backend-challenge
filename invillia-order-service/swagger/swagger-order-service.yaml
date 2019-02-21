@@ -25,12 +25,12 @@ tags:
   description: Everything about item orders
   externalDocs:
     description: Find out more
-    url: http://invillia.com/orders
+    url: http://invillia.com/items
 - name: addresses
   description: Everything about addresses
   externalDocs:
     description: Find out more
-    url: http://invillia.com/orders
+    url: http://invillia.com/address
     
 schemes:
 - http
@@ -403,5 +403,3 @@ definitions:
       documentation:
         type: string
         example: http://invilia.com/store/service/errors/list/#field_required      
-        
-        
