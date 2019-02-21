@@ -1,0 +1,491 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Official documentation for Invillia Store API",
+    "version" : "1.0.0",
+    "title" : "Invillia Store Service",
+    "termsOfService" : "http://localhost:8001/invillia/terms",
+    "contact" : {
+      "name" : "Administrator",
+      "url" : "http://localhost:8001/invillia/support",
+      "email" : "administrator@invillia.com"
+    },
+    "license" : {
+      "name" : "MIT",
+      "url" : "http://opensource.org/licenses/MIT"
+    }
+  },
+  "host" : "localhost:8001",
+  "basePath" : "/invillia",
+  "tags" : [ {
+    "name" : "stores",
+    "description" : "Everything about stores",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://invilia.com/"
+    }
+  }, {
+    "name" : "addresses",
+    "description" : "Everything about addresses",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://invilia.com"
+    }
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/store/" : {
+      "get" : {
+        "tags" : [ "stores" ],
+        "summary" : "get all objects",
+        "description" : "get all instances of store objects",
+        "operationId" : "getStores",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Store"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "stores" ],
+        "summary" : "create a store object",
+        "description" : "Create a new instance of store object",
+        "operationId" : "add",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "store_",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Store"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Object created",
+            "schema" : {
+              "$ref" : "#/definitions/Store"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/store/{id}" : {
+      "get" : {
+        "tags" : [ "stores" ],
+        "summary" : "get a store object",
+        "description" : "get an instance of store object",
+        "operationId" : "getStore",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Store"
+            }
+          },
+          "404" : {
+            "description" : "Store not found",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "stores" ],
+        "summary" : "update a store object",
+        "description" : "Update an instance of store object",
+        "operationId" : "update",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "in" : "body",
+          "name" : "store_",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Store"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Invalid request.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "stores" ],
+        "summary" : "delete a store object",
+        "description" : "Remove an instance of store object",
+        "operationId" : "delete",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No content"
+          },
+          "400" : {
+            "description" : "Invalid request.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/stores/{storeId}/address" : {
+      "get" : {
+        "tags" : [ "addresses" ],
+        "summary" : "get all addresses",
+        "description" : "gets a list of addresses from a store id",
+        "operationId" : "getAddresses",
+        "parameters" : [ {
+          "name" : "storeId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Address"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "addresses" ],
+        "summary" : "create a new address object",
+        "description" : "Create a new instance of address object",
+        "operationId" : "addAddress",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "storeId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "address",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Address"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "schema" : {
+              "$ref" : "#/definitions/Address"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/stores/{storeId}/address/{id}" : {
+      "get" : {
+        "tags" : [ "addresses" ],
+        "summary" : "get the address from a store id",
+        "description" : "gets an address from a store id",
+        "parameters" : [ {
+          "name" : "storeId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Address"
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "addresses" ],
+        "summary" : "Update an address object",
+        "description" : "Update an address object",
+        "operationId" : "updateAddress",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "storeId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "address",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Address"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No content",
+            "schema" : {
+              "$ref" : "#/definitions/Address"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "addresses" ],
+        "summary" : "Delete an address object",
+        "description" : "Delete an address object",
+        "operationId" : "deleteAddress",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "storeId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No content",
+            "schema" : {
+              "$ref" : "#/definitions/Address"
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Store" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Amazon"
+        },
+        "deleted" : {
+          "type" : "boolean",
+          "example" : false
+        },
+        "createdDate" : {
+          "type" : "string",
+          "example" : "2019-02-19"
+        },
+        "updatedDate" : {
+          "type" : "string",
+          "example" : "2019-02-20"
+        },
+        "deletedDate" : {
+          "type" : "string",
+          "example" : "2019-02-20"
+        },
+        "addresses" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Address"
+          }
+        }
+      }
+    },
+    "Address" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "example" : 1
+        },
+        "address" : {
+          "type" : "string",
+          "example" : "First Avenue, 1300"
+        },
+        "city" : {
+          "type" : "string",
+          "example" : "Newark"
+        },
+        "state" : {
+          "type" : "string",
+          "example" : "New Jersey"
+        },
+        "postalCode" : {
+          "type" : "string",
+          "example" : "45412245"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "example" : "2019-02-01"
+        },
+        "updatedDate" : {
+          "type" : "string",
+          "example" : "2019-02-01"
+        },
+        "deletedDate" : {
+          "type" : "string",
+          "example" : "2019-02-01"
+        },
+        "deleted" : {
+          "type" : "boolean",
+          "example" : false
+        },
+        "store" : {
+          "$ref" : "#/definitions/Store"
+        }
+      }
+    },
+    "ErrorMessage" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string",
+          "example" : "An error has ocurred"
+        },
+        "documentation" : {
+          "type" : "string",
+          "example" : "http://invilia.com/store/service/errors/list/#field_required"
+        }
+      }
+    }
+  }
+}
