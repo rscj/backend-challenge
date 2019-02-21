@@ -1,6 +1,5 @@
 package com.invillia.models;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,8 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "store")
 @NamedQueries({@NamedQuery(name = "Store.getCountStoreByName", query = "select count(s) from Store s where s.name=:name"), 
 	           @NamedQuery(name = "Store.getCountOtherStoresByName", query = "select count(s) from Store s where s.name=:name and s.id <>:id"),
-	           @NamedQuery(name = "Store.getStoreById", query = "select s from Store s left join s.addresses where s.id=:id")})
+	           @NamedQuery(name = "Store.getStoreById", query = "select s from Store s left join s.addresses where s.id=:id"),
+	           @NamedQuery(name = "Store.getStoreCountById", query = "select count(s) from Store s where s.id=:id")})
 public class Store {
 
 	@Id
@@ -33,18 +31,7 @@ public class Store {
 	private Long id;
 	@NotNull(message = "The name is required.")
 	@Column(name = "name", length = 255, nullable = false, unique = true)
-	private String name;
-	@Column(name = "isDeleted")
-	private boolean deleted;
-	@Column(name = "createdDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdDate;
-	@Column(name = "updatedDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedDate;
-	@Column(name = "deletedDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date deletedDate;
+	private String name;	
 	@JsonIgnoreProperties("store")
 	@OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Address> addresses;
@@ -76,38 +63,6 @@ public class Store {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public Date getDeletedDate() {
-		return deletedDate;
-	}
-
-	public void setDeletedDate(Date deletedDate) {
-		this.deletedDate = deletedDate;
 	}
 	
 	public List<Address> getAddresses() {

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.invillia.exceptions.OrderException;
-import com.invillia.exceptions.OrderNotFoundException;
+import com.invillia.exceptions.EntityNotFoundException;
 import com.invillia.models.Order;
 import com.invillia.repositories.OrderRepository;
 
@@ -25,21 +25,20 @@ public class OrderService {
 	public Order getOrder(Long id) {		
 		Order order = repository.getOrderById(id);
 		if (order == null) {
-			throw new OrderNotFoundException("There was no store with id: " + String.valueOf(id));				
+			throw new EntityNotFoundException("There was no store with id: " + String.valueOf(id));				
 		}
 		return order;		
 	}
 	
-	public List<Order> getOrders() {
-		return repository.findAll();
+	public List<Order> getOrders(Long storeId) {
+		return repository.getOrdersByStoreId(storeId);
 	}
 	
-	public Order add(Order order) {
+	public Order add(Order order, Long storeId) {
 
-		//Validar unit price e quantity
-		//verifyRequiredField(order);
-			
 		try {					
+			order.setStore(storeId);
+			order.setStatus("NEW");
 			return repository.save(order);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -65,7 +64,7 @@ public class OrderService {
 		try {			
 			repository.deleteById(id);
 		} catch(NoSuchElementException e) {			
-			throw new OrderNotFoundException("There was no order with the id: " + String.valueOf(id));
+			throw new EntityNotFoundException("There was no order with the id: " + String.valueOf(id));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new OrderException(e.getMessage());

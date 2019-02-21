@@ -1,7 +1,5 @@
 package com.invillia.models;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,15 +9,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "address")
 @NamedQueries({@NamedQuery(name = "Address.findAllByStoreId", query = "select a from Address a where a.store.id =:storeId order by a.address"),
-	           @NamedQuery(name = "Address.findById", query = "select a from Address a where a.store.id =:storeId and a.id =:id")})
+	           @NamedQuery(name = "Address.findById", query = "select a from Address a where a.store.id =:storeId and a.id =:id"),
+	           @NamedQuery(name = "Address.getAddressCountById", query = "select count(a) from Address a where a.id =:id")})
 public class Address implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,18 +31,7 @@ public class Address implements java.io.Serializable {
 	@Column(name = "state", length = 255)
 	private String state;
 	@Column(name = "postal_code")
-	private String postalCode;
-	@Column(name = "createdDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdDate;
-	@Column(name = "updatedDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedDate;
-	@Column(name = "deletedDate")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date deletedDate;
-	@Column(name = "isDeleted")
-	private boolean deleted;
+	private String postalCode;	
 	@JsonIgnoreProperties("addresses")
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "store_id")
@@ -96,38 +82,6 @@ public class Address implements java.io.Serializable {
 		this.postalCode = postalCode;
 	}
 	
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public Date getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public Date getDeletedDate() {
-		return deletedDate;
-	}
-
-	public void setDeletedDate(Date deletedDate) {
-		this.deletedDate = deletedDate;
-	}
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public Store getStore() {
 		return store;
 	}

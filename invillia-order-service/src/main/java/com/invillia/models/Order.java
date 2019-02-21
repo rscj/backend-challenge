@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "orders")
-@NamedQueries({@NamedQuery(name = "Order.getOrderById", query = "select o from Order o left join o.items where o.id =:id order by o.confirmationDate, o.status")})
+@NamedQueries({@NamedQuery(name = "Order.getOrderById", query = "select o from Order o left join o.items where o.id =:id order by o.confirmationDate, o.status"),
+	           @NamedQuery(name = "Order.getCountOrderById", query = "select count(o) from Order o where o.id =:id"),
+	           @NamedQuery(name = "Order.getOrdersByStoreId", query = "select o from Order o left join o.items where o.store =:storeId order by o.confirmationDate, o.status")})
 public class Order implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,12 +36,22 @@ public class Order implements java.io.Serializable {
 	private Date confirmationDate;
 	@Column(name = "status")
 	private String status;	
+	@Column(name = "store_id")
+	private Long store;
 	@JsonIgnoreProperties("order")
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderItem> items;
+	@JsonIgnoreProperties("order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Address> adresses;
 	
 	public Order() {
 		
+	}
+	
+	public Order(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public Long getId() {
@@ -66,12 +78,28 @@ public class Order implements java.io.Serializable {
 		this.status = status;
 	}
 	
+	public Long getStore() {
+		return store;
+	}
+
+	public void setStore(Long store) {
+		this.store = store;
+	}
+
 	public List<OrderItem> getItems() {
 		return items;
 	}
 
 	public void setItems(List<OrderItem> items) {
 		this.items = items;
+	}
+	
+	public List<Address> getAdresses() {
+		return adresses;
+	}
+
+	public void setAdresses(List<Address> adresses) {
+		this.adresses = adresses;
 	}
 
 	@Override

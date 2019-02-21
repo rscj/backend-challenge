@@ -17,6 +17,13 @@ public class CustomAddressRepositoryImpl implements CustomAddressRepository {
 	private EntityManager manager;
 	
 	@Override
+	public int getAddressCountById(Long id) {
+		TypedQuery<Long> query = manager.createNamedQuery("Address.getAddressCountById", Long.class);
+		query.setParameter("id", id);
+		return query.getSingleResult().intValue();
+	}
+	
+	@Override
 	public Address getAddressById(Long storeId, Long id) {
 		try {
 			TypedQuery<Address> query = manager.createNamedQuery("Address.findById", Address.class);

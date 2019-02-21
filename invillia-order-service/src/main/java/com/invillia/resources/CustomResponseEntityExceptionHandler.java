@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.invillia.exceptions.OrderNotFoundException;
+import com.invillia.exceptions.EntityNotFoundException;
+import com.invillia.exceptions.InvalidRequestException;
+import com.invillia.exceptions.InvalidValueException;
+import com.invillia.exceptions.RequiredFieldException;
 import com.invillia.models.ErrorMessage;
 
 @ControllerAdvice
@@ -22,21 +25,27 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 		return new ResponseEntity<ErrorMessage>(message, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	/*@ExceptionHandler(RequiredFieldException.class) 
+	@ExceptionHandler(RequiredFieldException.class) 
 	public final ResponseEntity<ErrorMessage> handleNameRequiredException(RequiredFieldException ex, WebRequest request) {
 		ErrorMessage message = new ErrorMessage("Field required exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#field_required");
 		return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(DuplicatedNameException.class)
-	public final ResponseEntity<ErrorMessage> handleDuplicatedNameException(DuplicatedNameException ex, WebRequest request) {
-		ErrorMessage message = new ErrorMessage("Duplicated name exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#duplicated_name");
+	@ExceptionHandler(InvalidValueException.class)
+	public final ResponseEntity<ErrorMessage> handleDuplicatedNameException(InvalidValueException ex, WebRequest request) {
+		ErrorMessage message = new ErrorMessage("Invalid value exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#duplicated_name");
 		return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
-	}*/
+	}
 	
-	@ExceptionHandler(OrderNotFoundException.class) 
-	public final ResponseEntity<ErrorMessage> handleStoreNotFoundException(OrderNotFoundException ex, WebRequest request) {
-		ErrorMessage message = new ErrorMessage("Entity found exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#entity_not_found");
+	@ExceptionHandler(InvalidRequestException.class)
+	public final ResponseEntity<ErrorMessage> handleDuplicatedNameException(InvalidRequestException ex, WebRequest request) {
+		ErrorMessage message = new ErrorMessage("Invalid request exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#invalid_request");
+		return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class) 
+	public final ResponseEntity<ErrorMessage> handleStoreNotFoundException(EntityNotFoundException ex, WebRequest request) {
+		ErrorMessage message = new ErrorMessage("Entity not found exception: " + ex.getMessage(), DOCUMENTATION_URL_BASE + "/#entity_not_found");
 		return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
 	}
 }

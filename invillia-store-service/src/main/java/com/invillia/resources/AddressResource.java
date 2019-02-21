@@ -54,7 +54,7 @@ public class AddressResource {
 			                              		 @PathVariable("storeId") final Long storeId,
 			                              		 UriComponentsBuilder builder) {		
 		
-		service.update(address, id);		
+		service.update(address, storeId, id);		
 		return ResponseEntity.noContent().build();
 	}
 	

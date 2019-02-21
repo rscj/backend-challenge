@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,18 +27,30 @@ public class OrderItemResource {
 	private OrderItemService service;
 	
 	@GetMapping
-	public ResponseEntity<List<OrderItem>> getOrderItems() {
+	public ResponseEntity<List<OrderItem>> getOrderItems(@PathVariable("orderId") final long orderId) {
 		
-		List<OrderItem> items = service.getOrderItems();
+		List<OrderItem> items = service.getOrderItems(orderId);
 		return ResponseEntity.ok(items);		
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> addOrderItem(@RequestBody OrderItem item, UriComponentsBuilder builder) {
+	public ResponseEntity<Object> addOrderItem(@RequestBody OrderItem item, 
+											   @PathVariable("orderId") final long orderId,
+											   UriComponentsBuilder builder) {
 					
-		service.add(item);
+		service.add(item, orderId);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(item.getId()).toUri();
 		return ResponseEntity.created(location).body(item);		
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Object> updateOrderItem(@RequestBody OrderItem item,
+			                                      @PathVariable("orderId") final long orderId,
+			                                      @PathVariable("id") final long id,
+			                                      UriComponentsBuilder builder) {
+					
+		service.update(item, orderId, id);
+		return ResponseEntity.noContent().build();			
 	}
 	
 	@DeleteMapping("/{id}")

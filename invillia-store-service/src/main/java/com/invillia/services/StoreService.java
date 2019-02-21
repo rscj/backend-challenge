@@ -1,18 +1,17 @@
 package com.invillia.services;
 
-import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.invillia.exceptions.DuplicatedNameException;
 import com.invillia.exceptions.RequiredFieldException;
 import com.invillia.exceptions.StoreException;
-import com.invillia.exceptions.StoreNotFoundException;
+import com.invillia.exceptions.EntityNotFoundException;
 import com.invillia.models.Store;
 import com.invillia.repositories.StoreRepository;
 
@@ -28,7 +27,7 @@ public class StoreService {
 	public Store getStore(Long id) {		
 		Store store = repository.getStoreById(id);
 		if (store == null) {
-			throw new StoreNotFoundException("There was no store with id: " + String.valueOf(id));				
+			throw new EntityNotFoundException("There was no store with id: " + String.valueOf(id));				
 		}
 		return store;		
 	}
@@ -45,8 +44,7 @@ public class StoreService {
 			throw new DuplicatedNameException("Its already has an store with this name");
 		}
 		
-		try {		
-			store.setCreatedDate(new Date());
+		try {					
 			return repository.save(store);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -63,8 +61,7 @@ public class StoreService {
 		}
 		
 		try {			
-			store.setId(id);
-			store.setUpdatedDate(new Date());
+			store.setId(id);			
 			return repository.save(store);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -73,13 +70,11 @@ public class StoreService {
 	}
 	
 	public void delete(Long id) {		
-		try {			
-			Store store = repository.findById(id).get();
-			store.setDeleted(true);
-			store.setDeletedDate(new Date());
-			repository.save(store);
-		} catch(NoSuchElementException e) {			
-			throw new StoreNotFoundException("There was no store with the id: " + String.valueOf(id));
+		try {		
+			//TODO - Make a call to invillia-order-service to be sure that this order does not has any order
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new EntityNotFoundException(e.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new StoreException(e.getMessage());

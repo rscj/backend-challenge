@@ -14,6 +14,13 @@ public class CustomStoreRepositoryImpl implements CustomStoreRepository {
 	private EntityManager manager;
 	
 	@Override
+	public int getStoreCountById(Long id) {
+		TypedQuery<Long> query = manager.createNamedQuery("Store.getStoreCountById", Long.class);
+		query.setParameter("id", id);
+		return query.getSingleResult().intValue();
+	}
+	
+	@Override
 	public int getCountStoreByName(String name) {
 		Query query = manager.createNamedQuery("Store.getCountStoreByName");
 		query.setParameter("name", name);
